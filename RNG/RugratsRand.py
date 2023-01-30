@@ -1,11 +1,15 @@
 import argparse
 
-DEFAULT_SEED = 0x02DCF1A5
-DEFAULT_MULTIPLIER = 0x343FD
-DEFAULT_INCREMENET = 0x0269EC3
-DEFAULT_MODULUS = 1 << 32
+_DEFAULT_SEED = 0x02DCF1A5
+_DEFAULT_MULTIPLIER = 0x343FD
+_DEFAULT_INCREMENT = 0x0269EC3
+_DEFAULT_MODULUS = 1 << 32
 
 class RugratsRand():
+    DEFAULT_SEED = _DEFAULT_SEED
+    DEFAULT_MULTIPLIER = _DEFAULT_MULTIPLIER
+    DEFAULT_INCREMENT = _DEFAULT_INCREMENT
+    DEFAULT_MODULUS = _DEFAULT_MODULUS
     # First three random numbers numbers observed in game during startup
     # 0x07cae9d4
     # 0xc5831547
@@ -13,9 +17,9 @@ class RugratsRand():
 
     def __init__(self, seed: int=DEFAULT_SEED):
         self.seed = seed
-        self.multiplier = DEFAULT_MULTIPLIER
-        self.increment = DEFAULT_INCREMENET
-        self.modulus = DEFAULT_MODULUS
+        self.multiplier = self.DEFAULT_MULTIPLIER
+        self.increment = self.DEFAULT_INCREMENT
+        self.modulus = self.DEFAULT_MODULUS
 
 
     def peek32(self):
@@ -27,19 +31,19 @@ class RugratsRand():
     def next32(self):
         self.seed = (self.seed * self.multiplier + self.increment) % self.modulus
         return self.seed
-    
+
     def next8(self):
         return ((self.next32() >> 0x10) & 0xFF)
 
 
     @staticmethod
-    def lookup32(seed, multiplier=DEFAULT_MULTIPLIER, increment=DEFAULT_INCREMENET, modulus=DEFAULT_MODULUS):
+    def lookup32(seed, multiplier=_DEFAULT_MULTIPLIER, increment=_DEFAULT_INCREMENT, modulus=_DEFAULT_MODULUS):
         return (seed * multiplier + increment) % modulus
 
     @staticmethod
-    def lookup8(seed, multiplier=DEFAULT_MULTIPLIER, increment=DEFAULT_INCREMENET, modulus=DEFAULT_MODULUS):
-        next = RugratsRand.lookup32(seed, multiplier, increment, modulus)
-        return ((next >> 0x10) & 0xFF)
+    def lookup8(seed, multiplier=_DEFAULT_MULTIPLIER, increment=_DEFAULT_INCREMENT, modulus=_DEFAULT_MODULUS):
+        next_val = RugratsRand.lookup32(seed, multiplier, increment, modulus)
+        return ((next_val >> 0x10) & 0xFF)
 
 
 def main(start_seed: int, length: int, print_byte: bool):
@@ -56,7 +60,7 @@ def main(start_seed: int, length: int, print_byte: bool):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--start_seed", help="Seed to start with. Overriden by hex_start_seed", type=int, default=DEFAULT_SEED)
+    parser.add_argument("-i", "--start_seed", help="Seed to start with. Overridden by hex_start_seed", type=int, default=_DEFAULT_SEED)
     parser.add_argument("-x", "--hex_start_seed", help="Seed to start with expected in LE order. Overrides (int) start_seed", type=str, default=None)
     parser.add_argument("-l", "--length", help="Number of random numbers to print", type=int, default=100)
     parser.add_argument("-b", "--print_byte", help="If True, prints the single byte version (as opposed to default 4)", default=False, action="store_true")
