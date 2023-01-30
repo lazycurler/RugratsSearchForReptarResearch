@@ -18,8 +18,9 @@ For more precise RNG prediction and improved static analysis the Python file `Ru
 ## Appendix
 
 ### LCG Specifics
- - Seed on Boot: `0x02DCF1A5`
- - Multiplier: `0x000343FD`
+- Address of Current Value '0x800c3f94'
+- Seed on Boot: `0x02DCF1A5`
+- Multiplier: `0x000343FD`
 - Increment: `0x00269EC3`
 - Modulus `2^32` (32 bits)
 - Function implemented at: `0x8002fb7c`
